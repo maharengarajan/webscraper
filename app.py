@@ -1,7 +1,16 @@
-from logger import logger
+from bs4 import BeautifulSoup
+import requests
 
-def test(a,b):
-    logger.info('add two int')
-    return a+b
+html_text = requests.get("https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=Python&txtLocation=").text
+soup = BeautifulSoup(html_text, 'lxml')
+job = soup.find("li", class_="clearfix job-bx wht-shd-bx")
+company_name = job.find("h3", class_="joblist-comp-name").text.replace(" ", "")
+skills = job.find("span", class_="srp-skills").text.replace(" ", "")
+published_date = job.find("span", class_="sim-posted").span.text
 
-test(4,5)
+print(published_date)
+
+# print(f'''
+# Company Name : {company_name}
+# Required skills : {skills}
+#       ''')
